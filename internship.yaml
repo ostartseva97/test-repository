@@ -1,0 +1,233 @@
+openapi: 3.0.0
+info:
+  title: Методы работы со стажировкой
+  version: 1.0.0
+paths:
+  /internship:        
+    get:
+      tags:
+        - Стажировка
+      summary: Список стажировок 
+      operationId: listIntership
+      security:
+        - Authorization: []
+      parameters: 
+        - name: archive
+          in: query
+          required: false
+          description: Список архивных стажировок
+          schema: 
+            type: boolean
+      responses:
+        '200':
+          description: Список стажировок
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/Internship'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Список стажировок не найден
+        '500':
+          description: Внутренняя ошибка сервера
+  /internship/trainees/{id}:        
+    post:
+      tags:
+        - Стажеры
+      summary: Добавить стажера к стажировке
+      operationId: createTrainees
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор стажера
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternshipTrainees'
+      responses:
+        '200':
+          description: Стажер добавлен к стажировке
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор добавленного стажера
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера        
+    delete:
+      tags:
+        - Стажеры 
+      summary: Удаление стажера со стажировки
+      operationId: deleteTrainees
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор стажера
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Стажер успешно удален
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '404':
+          description: Стажер не найден
+        '500':
+          description: Внутренняя ошибка сервера
+  /internship/mentor/{id}:
+    post:
+      tags:
+        - Ментор
+      summary: Добавить ментора к стажировке
+      operationId: createMentor
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор ментора
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternshipMentor'
+      responses:
+        '200':
+          description: Ментор добавлен к стажировке
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор добавленного ментора
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+  /internship/director/{id}:
+    post:
+      tags:
+        - Руководитель
+      summary: Добавить руководителя к стажировке
+      operationId: createDirector
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор руководителя
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InternshipDirector'
+      responses:
+        '200':
+          description: Руководитель добавлен к стажировке
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор добавленного руководителя
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Internship:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Название стажировки
+        id:
+          type: string
+          description: Id стажировки
+    InternshipDirector:
+      type: object
+      required:
+      - directorId
+      - intershipId
+      properties:
+        directorId:
+          type: string
+          description: Id руководителя
+        internshipId:
+          type: string
+          description: Id стажировки
+    InternshipMentor:
+      type: object
+      required:
+        - mentorIds
+        - internshipId
+      properties:
+        mentorIds:
+          type: array
+          items:
+            type: string
+          description: Id ментора
+        internshipId:
+          type: string
+          description: Id стажировки
+    InternshipTrainees:
+       type: object
+       required:
+        - traineesIds
+        - internshipID
+       properties:
+        traineesIds:
+          type: array
+          items:
+            type: string
+          description: Id стажера
+        internshipId:
+          type: string
+          description: Id стажировки
+  

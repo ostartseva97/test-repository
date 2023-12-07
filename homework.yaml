@@ -1,0 +1,312 @@
+openapi: 3.0.0
+info:
+  title: Методы работы с домашним заданием
+  version: 1.0.0
+paths:
+  /homework:
+    post: 
+      tags:
+       - Домашнее задание
+      summary: Создание формы домашнего задания
+      operationId: createHomework
+      security: 
+        - Authorization: []
+      requestBody: 
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties: 
+                lectureId: 
+                  type: string
+                  description: Идентификатор лекции
+                items:
+                    type: array
+                    items: 
+                     $ref: '#/components/schemas/HomeworkForm'
+      responses:
+        '200':
+          description: Домашнее задание успешно создано
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор созданного домашнего задания
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+  /homework/{id}:        
+   get:
+      tags:
+        - Домашнее задание 
+      summary: Получение формы по домашнему заданию
+      operationId: getHomework
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор домашнего задания
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Домашнее задание
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор домашнего задания
+                  homeworks:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/HomeworkForm'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Домашнее задание не найдено
+        '500':
+          description: Внутренняя ошибка сервера
+  /homework/answer:        
+    post:
+      tags:
+        - Домашнее задание
+      summary: Создание ответа на домашнее задание
+      operationId: createAnswer
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+             type: object
+             properties: 
+                traineeId: 
+                  type: string
+                  description: Идентификатор стажера
+                homeworkId:
+                  type: string
+                  description: Идентификатор домашнего задания
+                items:
+                    type: array
+                    items: 
+                     $ref: '#/components/schemas/HomeworkAnswer'
+      responses:
+        '200':
+          description: Ответ успешно создан
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор созданного ответа 
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+  /homework/answer/{id}:          
+    get:
+      tags:
+        - Домашнее задание 
+      summary: Получение ответа по домашнему заданию
+      operationId: getHomeworkAnswer
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор стажера
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ответ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lectureTitle:
+                    type: string
+                    description: Название лекции 
+                  homeworkItems:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/HomeworkAnswer'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Ответ не найден
+        '500':
+          description: Внутренняя ошибка сервера
+  /homework/answers/{id}:
+    get:
+      tags:
+        - Домашнее задание 
+      summary: Получение списка домашних заданий 
+      operationId: getHomeworks
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор домашнего задания
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список домашних заданий 
+          content:
+            application/json:
+              schema:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Homeworks'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Домашнее задание не найдено
+        '500':
+          description: Внутренняя ошибка сервера
+  /homework/estimation:         
+    post:
+      tags:
+        - Домашнее задание
+      summary: Создание оценки на домашнее задание
+      operationId: createHomeworkEstimation
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                     $ref: '#/components/schemas/HomeworkEstimation'
+      responses:
+        '200':
+          description: Оценка успешно создана
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор созданной оценки
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+  /homework/estimation/{id}:        
+    get:
+      tags:
+        - Домашнее задание 
+      summary: Получение информации по оценке за домашнее задание
+      operationId: getHomeworkestimation
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор оценки
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Оценка
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/HomeworkEstimation'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Оценка не найдена
+        '500':
+          description: Внутренняя ошибка сервера
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Homeworks:
+      required:
+      -  lectureTitle
+      properties:
+        lectureTitle:
+          type: string
+          description: Название лекции
+        homeworkId:
+          type: string
+          description: id домашнего задания
+    HomeworkEstimation:
+      type: object
+      required:
+        - comment
+        - estimation
+      properties:
+        comment:
+          type: string
+          description: Комментарий по домашнему заданию
+        estimation: 
+          type: number
+          description: Оценка по домашнему заданию
+        homeworkid: 
+          type: string
+          description: id домащнего задания
+        traineesId:
+          type: string
+          description: id стажера
+    HomeworkAnswer:
+      type: object
+      required:
+        - name
+        - answer
+      properties:
+        name:
+          type: string
+          description: Название задания с описанием
+        answer:
+          type: string
+          description: Ответ на задание
+    HomeworkForm:
+      type: object
+      required:
+        - description
+        - typeAnswer
+      properties:
+        description:
+          type: string
+          description: Описание пункта домашнего задания
+        typeAnswer:
+          type: string
+          description: Тип ответа
+        answerOptions:
+          type: array
+          items:
+            type: string
+          description: Варианты ответа
+  

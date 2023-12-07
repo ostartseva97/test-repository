@@ -1,0 +1,50 @@
+openapi: 3.0.0
+info:
+  title: Служба безопасности
+  version: 1.0.0
+paths:
+  /securityService:
+    post:
+      summary: Отправка кандидата в службу безопасности
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - internshipID
+              properties:
+                id:
+                 type: string
+                 description: id стажера
+                internshipID:
+                 type: string
+                 description: id стажировки
+      responses:
+        '200':
+          description: Пользователь отправлен в службу безопасности
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор отправленного пользователя
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
