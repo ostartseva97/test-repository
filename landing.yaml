@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  title: Лендинг
+  version: 1.0.0
+paths:
+  /landing:
+    post:
+      tags:
+        - Лендинг
+      summary: Создание/редактирование лендинга
+      operationId: createLanding
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: query
+          required: false
+          description: Идентификатор лендинга
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Landing'
+      responses:
+        '200':
+          description: Лендинг успешно создан/обновлен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор лендинга
+                  landing:
+                    $ref: '#/components/schemas/Landing'
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+  /landing{id}:        
+    get:
+      tags:
+        - Лендинг
+      summary: Получение информации по лендингу
+      operationId: getLanding
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор лендинга
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Страница лендинга
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор лендинга
+                  landing:
+                   $ref: '#/components/schemas/Landing'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Лендинг не найден
+        '500':
+          description: Внутренняя ошибка сервера      
+  
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Landing:
+      type: object
+      required:
+        - title
+        - subtitle
+        - text
+        - footer
+        - banner
+      properties:
+        title:
+          type: string
+          description: Заголовок
+        subtitle:
+          type: string
+          description: Подзаголовок
+        text: 
+          type: string
+          description: Краткая информация о стажировке
+        footer: 
+          type: string
+        internshipId:
+          type: string
+          description: id стажировки
+        banner:
+          $ref: '#/components/schemas/Banner'
+    Banner:
+      type: object
+      description: Информация о баннере
+      properties:
+        image:
+          type: string
+          description: Ссылка на картинку
+        buttonInfo:
+          type: object
+          properties:
+            name: 
+              type: string
+              description: Название кнопки
+            url:
+              type: string
+              description: Ссылка кнопки 

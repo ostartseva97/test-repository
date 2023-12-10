@@ -1,0 +1,95 @@
+openapi: 3.0.0
+info:
+  title: Методы работы с ответами на заявку
+  version: 1.0.0
+paths:
+  /responseToApplication:
+    post:
+      tags:
+        - Форма для заявки
+      summary: Создание ответа на заявку
+      operationId: createResponse
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResponseToApplication'
+      responses:
+        '200':
+          description: Ответ успешно создан
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: id созданного ответа 
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+  /responseToApplication/{id}:        
+    get:
+      tags:
+        - Форма для заявки 
+      summary: Получение ответа на заявку
+      operationId: getresponseToApplication
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор ответа на заявку
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ответ на заявку
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/ResponseToApplication'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Ответ на заявку не найден
+        '500':
+          description: Внутренняя ошибка сервера
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ResponseToApplication:
+      type: object
+      required:
+      - answer
+      - applicationFormId
+      properties:
+        answers:
+          type: array
+          description: Ответы на заявку
+          items: 
+            type: object
+            properties: 
+              name:
+                type: string
+                description: Название вопроса
+              answer: 
+                type: string
+                description: Ответ на вопрос
+        traineeId:
+          type: string
+          description: id стажера
+        applicationFormId:
+          type: string
+          description: id формы для заявки

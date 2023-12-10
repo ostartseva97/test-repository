@@ -1,0 +1,90 @@
+openapi: 3.0.0
+info:
+  title: Методы работы с руководителем
+  version: 1.0.0
+paths:
+  /director/{id}:         
+    get:
+      tags:
+        - Руководитель
+      summary: Получение информации по руководителю
+      operationId: getdirector
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор руководителя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Руководитель
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Director'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Руководитель не найден
+        '500':
+          description: Внутренняя ошибка сервера
+    delete:
+      tags:
+        - Руководитель 
+      summary: Удаление руководителя со стажировки
+      operationId: deleteDirector
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор руководителя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Руководитель успешно удален
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '404':
+          description: Руководитель не найден
+        '500':
+          description: Внутренняя ошибка сервера           
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Director:
+      type: object
+      required:
+      - id
+      - lastName
+      - firstName
+      - middleName
+      properties:
+        id:
+          type: string
+          description: Id руководителя
+        lastName:
+          type: string
+          description: Фамилия 
+        firstName:
+          type: string
+          description: Имя 
+        middleName:
+          type: string
+          description: Отчество
+        internshipIds:
+          type: array
+          items:
+            type: string
+          description: Id стажировки

@@ -1,0 +1,76 @@
+openapi: 3.0.0
+info:
+  title: Регистрация пользователя
+  version: 1.0.0
+paths:
+  /registration:
+    post:
+      tags:
+        - Регистрация
+      summary: Регистрация пользователя
+      operationId: createUser
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Registration'
+      responses:
+        '200':
+          description: Пользователь успешно зарегистрирован
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор зарегистрированного пользователя
+                
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Registration:
+      type: object
+      required:
+        - lastName
+        - firstName
+        - middleName
+        - registration
+        - dateOfBirth
+        - phoneNumber
+        - email
+      properties:
+        lastName:
+          type: string
+          description: Фамилия 
+        firstName:
+          type: string
+          description: Имя 
+        middleName:
+          type: string
+          description: Отчество 
+        registration:
+          type: string
+          description: Прописка 
+        dateOfBirth:
+          type: string
+          description: Дата рождения 
+        phoneNumber:
+          type: string
+          description: Телефон
+        email:
+          type: string
+          description: Почта 

@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  title: Методы работы с менторами 
+  version: 1.0.0
+paths:
+  /mentor/{id}:         
+    get:
+      tags:
+        - Ментор
+      summary: Получение информации по ментору
+      operationId: getmentor
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор ментора
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ментор
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Mentor'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Ментор не найден
+        '500':
+          description: Внутренняя ошибка сервера
+    delete:
+      tags:
+        - Ментор
+      summary: Удаление ментора со стажировки
+      operationId: deleteMentor
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор ментора
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ментор успешно удален
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '404':
+          description: Ментор не найден
+        '500':
+          description: Внутренняя ошибка сервера           
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+     Mentor:
+      type: object
+      required:
+      - id
+      - lastName
+      - firstName
+      - middleName
+      properties:
+        id:
+          type: string
+          description: Id ментора
+        lastName:
+          type: string
+          description: Фамилия 
+        firstName:
+          type: string
+          description: Имя 
+        middleName:
+          type: string
+          description: Отчество
+        intershipIds:
+          type: array
+          items:
+            type: string
+          description: Id стажировки
+        trainees:
+          type: array
+          description: Стажер
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: id Стажера
+              lastName:
+                type: string
+                description: Имя стажера
+              firstName:
+                type: string
+                description: Фамилия стажера 
+              middleName:
+                type: string
+                description: Отчество стажера   

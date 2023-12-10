@@ -1,0 +1,190 @@
+openapi: 3.0.0
+info:
+  title: Лекции
+  version: 1.0.0
+paths:
+  /lecture:
+    post:
+      tags:
+        - Лекция
+      summary: Создание лекции
+      operationId: createlecture
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lecture'
+      responses:
+        '200':
+          description: Лекция успешно создана
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Статус
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+    get:
+      tags:
+        - Лекция 
+      summary: Получение списка лекций
+      operationId: listLectur
+      security:
+        - Authorization: []
+      parameters:
+        - name: internshipId
+          in: query
+          required: true
+          description: Идентификатор стажировки
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список лекций
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties: 
+                    id:
+                      type: string
+                      description: id лекции
+                    homeWorkId:
+                      type: string
+                      description: id домашнего задания
+                    link:
+                      type: string
+                      description: ссылка на подключение
+                    dateAndTime:
+                      type: string
+                      description: Дата и время проведения
+                    serialNumber:
+                      type: string
+                      description: Порядковый номер
+                    title:
+                      type: string
+                      description: Название лекции
+                    description:
+                      type: string
+                      description: Описание лекции
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Список сотрудников не найден
+        '500':
+          description: Внутренняя ошибка сервера      
+  /lecture/{id}:
+    get:
+      tags:
+        - Лекция
+      summary: Получение информации по лекции
+      operationId: getLecture
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор лекции
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Лекция
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Lecture'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Лекция не найдена
+        '500':
+          description: Внутренняя ошибка сервера
+    patch:
+      tags:
+        - Лекция
+      summary: Обновление лекции
+      operationId: updatelecture
+      security:
+        - Authorization: []
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификтор лекции
+          schema: 
+            type: string  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lecture'
+      responses:
+        '200':
+          description: Лекция успешно обновлена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Статус
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера        
+  
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Lecture:
+      type: object
+      properties:
+        presentation:
+          type: string
+          description: Ссылка на презентацию
+        video:
+          type: string
+          description: Ссылка на видео
+        additionalMaterials:
+          type: string
+          description: Ссылка на дополнительные материалы
+        link: 
+          type: string
+          description: Ссылка на встречу
+        dateAndTime:
+          type: string
+          description: Дата и время проведения
+        serialNumber:
+          type: string
+          description: Порядковый номер
+        title:
+          type: string
+          description: Название лекции
+        description:
+          type: string
+          description: Описание лекции
+        homeworkId:
+          type: string
+          description: id доомашнего задания

@@ -1,0 +1,163 @@
+openapi: 3.0.0
+info:
+  title: Методы работы со стажерами 
+  version: 1.0.0
+paths:
+  /trainees:
+    get:
+      tags:
+        - Стажеры 
+      summary: Получение списка стажеров
+      operationId: listTrainees
+      security:
+        - Authorization: []
+      parameters:
+        - name: isCandidate
+          in: query
+          required: false
+          description: Получение информации по кандидатам на стажировку
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список стажеров
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/Traineeslist'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Список стажеров не неайден
+        '500':
+          description: Внутренняя ошибка сервера
+  /trainee/{id}:
+    get:
+      tags:
+        - Стажеры
+      summary: Получение информации по стажеру
+      operationId: gettrainees
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id стажера
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Стажер
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор стажера
+                  trainee:
+                    $ref: '#/components/schemas/Trainees'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Стажер не найден
+        '500':
+          description: Внутренняя ошибка сервера        
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Traineeslist:
+      type: object
+      required:
+      - lastName
+      - firstName
+      - middleName
+      properties:
+        id:
+          type: string
+          description: id стажера 
+        lastName:
+          type: string
+          description: Фамилия 
+        firstName:
+          type: string
+          description: Имя 
+        middleName:
+          type: string
+          description: Отчество 
+        registration:
+          type: string
+          description: Прописка 
+        dateOfBirth:
+          type: string
+          description: Дата рождения 
+        phoneNumber:
+          type: string
+          description: Телефон
+        email:
+          type: string
+          description: Почта
+        mentorId:
+          type: string
+          description: id ментора
+        securityDescription:
+          type: string
+          description: Комментарий от СБ
+        securityPassed:
+          type: boolean
+          description: Статус проверки в СБ
+        internshipIds:
+          type: array
+          items:
+            type: string
+          description: Id стажировки
+    Trainees:
+      type: object
+      required:
+      - lastName
+      - firstName
+      - middleName
+      properties:
+        lastName:
+          type: string
+          description: Фамилия 
+        firstName:
+          type: string
+          description: Имя 
+        middleName:
+          type: string
+          description: Отчество 
+        registration:
+          type: string
+          description: Прописка 
+        dateOfBirth:
+          type: string
+          description: Дата рождения 
+        phoneNumber:
+          type: string
+          description: Телефон
+        email:
+          type: string
+          description: Почта
+        mentorId:
+          type: string
+          description: id ментора
+        securityDescription:
+          type: string
+          description: Комментарий от СБ
+        securityPassed:
+          type: boolean
+          description: Статус проверки в СБ
+        internshipIds:
+          type: array
+          items:
+            type: string
+          description: Id стажировки      

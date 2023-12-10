@@ -1,0 +1,118 @@
+openapi: 3.0.0
+info:
+  title: Расписание 
+  version: 1.0.0
+paths:
+  /schedule:
+    post:
+      tags:
+        - Расписание
+      summary: Создание/редактирование расписания
+      operationId: createSchedule
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: query
+          required: false
+          description: Идентификатор расписания
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Schedule'
+      responses:
+        '200':
+          description: Расписание успешно создано/обновлено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор созданного расписания
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+  /schedule/{id}:
+    get:
+      tags:
+        - Расписание
+      summary: Получение информации по расписанию
+      operationId: getSchedule
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор расписания
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Страница с расписанием
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор расписания
+                  internshipId:
+                    type: string
+                    description: id стажировки
+                  schedule:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Schedule'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Расписание не найдено
+        '500':
+          description: Внутренняя ошибка сервера        
+  
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Schedule:
+      type: object
+      required:
+      - dateAndTime
+      - name
+      - content
+      properties:
+        schedule:
+          type: array
+          description: Расписание
+          items: 
+            type: object
+            properties: 
+              lectureId:
+                type: string
+                description: id лекции
+              link: 
+                type: string
+                description: Ссылка
+              dateAndTime:
+                type: string
+                description: Дата и время проведения
+              name:
+                type: string
+                description: Название лекции
+              content:
+                type: string
+                description: Содержание

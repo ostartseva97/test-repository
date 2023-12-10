@@ -1,0 +1,91 @@
+openapi: 3.0.0
+info:
+  title: Обратная связь
+  version: 1.0.0
+paths:
+  /feedback:
+    post:
+      tags: 
+        - Обратная связь 
+      summary: Создание обратной связи
+      operationId: createfeedback
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                     $ref: '#/components/schemas/Feedback'
+      responses:
+        '200':
+          description: Обратная связь успешно создана
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор созданной обратной связи
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+  /feedback/{id}:        
+    get:
+      tags:
+        - Обратная связь
+      summary: Получение информации по обратной связи
+      operationId: getFeedback
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор обратной связи
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Обратная связь
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор созданной обратной связи
+                  feedback:
+                    $ref: '#/components/schemas/Feedback'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Домашнее задание не найдено
+        '500':
+          description: Внутренняя ошибка сервера
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Feedback:
+      type: object
+      required:
+      - text
+      properties:
+        traineeId:
+          type: string
+          description: id стажера
+        text: 
+          type: string
+          description: Впечатление о стажере
+        mentorId:
+          type: string
+          description: id ментора

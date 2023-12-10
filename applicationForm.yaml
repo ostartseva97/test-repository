@@ -1,0 +1,96 @@
+openapi: 3.0.0
+info:
+  title: Форма для заявки
+  version: 1.0.0
+paths:
+  /applicationForm:
+    post:
+      tags:
+        - Форма для заявки
+      summary: Создание формы для заявки
+      operationId: createApplicationForm
+      security:
+        - Authorization: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ApplicationForm'
+      responses:
+        '200':
+          description: Форма для заявки успешно создана
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Статус
+        '400':
+          description: Неверный запрос
+        '401':
+          description: Неавторизован
+        '500':
+          description: Внутренняя ошибка сервера
+  /applicationForm/{id}:        
+    get:
+      tags:
+        - Форма для заявки 
+      summary: Получение формы для заявки
+      operationId: getapplicationForm
+      security:
+        - Authorization: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор формы для заявки
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Форма для заявки
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/ApplicationForm'
+        '400':
+          description: Неверный запрос
+        '404':
+          description: Форма для заявки не найдена
+        '500':
+          description: Внутренняя ошибка сервера
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ApplicationForm:
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        internshipId:
+          type: string
+          description: id стажировки
+        name:
+          type: string
+          description: Название поля
+        type:
+          type: string
+          description: Тип поля
+        required:
+          type: boolean
+          description: обязательность
+        items:
+          type: array
+          items:
+            type: string
+          description: Варианты ответа

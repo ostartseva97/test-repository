@@ -1,0 +1,48 @@
+openapi: 3.0.0
+info:
+  title: Авторизация
+  version: 1.0.0
+paths:
+  /auth:
+    post:
+      tags:
+        - Авторизация
+      summary: Авторизация пользователя
+      operationId: authUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userName
+                - password
+              properties:
+                userName:
+                 type: string
+                 description: Логин пользователя
+                password:
+                  type: string
+                  description: Пароль пользователя
+      responses:
+        '200':
+          description: Пользователь успешно авторизован
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Идентификатор авторизовнного пользователя
+                  expiresIn:
+                    type: string
+                    description: Время жизни токена
+                  role:
+                    type: string
+                    description: Роль пользователя
+        '400':
+          description: Неверный запрос
+        '500':
+          description: Внутренняя ошибка сервера
